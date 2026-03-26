@@ -21,6 +21,7 @@ public:
 
 
 private:
+    { }
     OrderId orderId_;
     OrderType orderType_;
     Price price_;

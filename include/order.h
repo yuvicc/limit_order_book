@@ -10,13 +10,13 @@
 class Order {
 
 public:
-    Order(OrderId orderId, OrderType orderType, Side side, Price price, Quantity quantity)
+    Order(OrderId orderId, OrderType orderType, Price price, Quantity qty, Side side)
     : orderId_{ orderId }
     , orderType_{ orderType }
-    , side_ { side }
     , price_{ price }
-    , initialQuantity_{ quantity }
-    , remainingQuantity_{ quantity }
+    , initialQuantity_{ qty }
+    , remainingQuantity_{ qty }
+    , side_ { side }
     { }
 
     OrderId GetOrderId() const { return orderId_; }
@@ -39,7 +39,6 @@ public:
     void ToGoodTillCancel(Price price);
     void UpdatePrice(const OrderId orderid, const Price price);
     void UpdateQuantity(const OrderId orderid, const Quantity qty);
-
 
 private:
     OrderId orderId_;

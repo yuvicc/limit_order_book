@@ -4,6 +4,7 @@
 #include "alias.h"
 #include "side.h"
 #include "orderstatus.h"
+#include "timeinforce.h"
 
 #include <iostream>
 
@@ -19,30 +20,32 @@ public:
     , side_ { side }
     { }
 
-    OrderId GetOrderId() const { return orderId_; }
-    OrderType GetOrderType() const { return orderType_; }
-    Price GetPrice() const { return price_; }
-    Quantity GetInitialiQuantity() const { return initialQuantity_; }
-    Quantity GetRemainingQuantity() const { return remainingQuantity_; }
-    Quantity GetFilledQuantity() const { return GetInitialiQuantity() - GetRemainingQuantity(); }
-    OrderStatus GetOrderStatus() const { return status_; }
-    Timestamp GetTimestamp() const { return timestamp_; }
-    bool IsBuy() const { return side_ == Side::Buy; }
-    bool IsSell() const { return side_ == Side::Sell; }
+    [[nodiscard]] OrderId GetOrderId() const { return orderId_; }
+    [[nodiscard]] OrderType GetOrderType() const { return orderType_; }
+    [[nodiscard]] Price GetPrice() const { return price_; }
+    [[nodiscard]] Quantity GetInitialiQuantity() const { return initialQuantity_; }
+    [[nodiscard]] Quantity GetRemainingQuantity() const { return remainingQuantity_; }
+    [[nodiscard]] Quantity GetFilledQuantity() const { return GetInitialiQuantity() - GetRemainingQuantity(); }
+    [[nodiscard]] OrderStatus GetOrderStatus() const { return status_; }
+    [[nodiscard]] Timestamp GetTimestamp() const { return timestamp_; }
+    [[nodiscard]] TimeInForce GetTimeInForce() const { return tif_; }
+    [[nodiscard]] bool IsBuy() const { return side_ == Side::Buy; }
+    [[nodiscard]] bool IsSell() const { return side_ == Side::Sell; }
 
-    bool IsFilled() const { return GetRemainingQuantity() == 0; }
-    bool IsPartiallyFilled() const { return GetFilledQuantity() && !IsFilled(); }
-    bool IsCancelled() const { return status_ == OrderStatus::Cancelled; }
-    bool IsActive() const { return !IsFilled() && !IsCancelled(); }
+    [[nodiscard]] bool IsFilled() const { return GetRemainingQuantity() == 0; }
+    [[nodiscard]] bool IsPartiallyFilled() const { return GetFilledQuantity() && !IsFilled(); }
+    [[nodiscard]] bool IsCancelled() const { return status_ == OrderStatus::Cancelled; }
+    [[nodiscard]] bool IsActive() const { return !IsFilled() && !IsCancelled(); }
 
     void Fill(Quantity qty);
-    void ToGoodTillCancel(Price price);
-    void UpdatePrice(const OrderId orderid, const Price price);
-    void UpdateQuantity(const OrderId orderid, const Quantity qty);
+    void UpdatePrice(const Price price);
+    void UpdateQuantity(const Quantity qty);
+    void Cancel();
 
 private:
     OrderId orderId_;
     OrderType orderType_;
+    TimeInForce tif_;
     Price price_;
     Quantity initialQuantity_;
     Quantity remainingQuantity_;

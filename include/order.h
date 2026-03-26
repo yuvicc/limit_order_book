@@ -5,7 +5,6 @@
 #include "side.h"
 #include "orderstatus.h"
 
-
 #include <iostream>
 
 class Order {
@@ -51,5 +50,4 @@ private:
     Side side_;
     OrderStatus status_;
     Timestamp timestamp_;
-
 };

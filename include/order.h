@@ -6,8 +6,6 @@
 #include "orderstatus.h"
 #include "timeinforce.h"
 
-#include <iostream>
-
 class Order {
 
 public:
@@ -40,6 +38,7 @@ public:
     void Fill(Quantity qty);
     void UpdatePrice(const Price price);
     void UpdateQuantity(const Quantity qty);
+    void ToGoodTillCancel(const Price price);
     void Cancel();
 
 private:

@@ -41,6 +41,16 @@ illequidity or uncertainty.
 * FOK (Fill or Kill): Fill entirely or not at all. All or nothing.
 * Stop: Dormant until a trigger price is hit, then becomes a market/limit order.
 
+## Orderbook class
+
+The orderbook class is the central part which does everything. Create, delete, update and cancel orders.
+
+### Core Data structure
+1. Bids or simply Buys side which shows all the buy orders currently in the orderbook. This should basically be a kind of map of price(key) and order.
+The standard way to tackle this would be to use unordered map, since unorded map is quite slow. We will be using tsl/robin_map for fast computation.
+
+2. Now comes the complex part **Limit Level** which can be thought of as a container for all orders sitting at a specific price point.
+So we would need to group the orders so that we could find which orders to fill first. We will using here price-time-priority for our limit level.
 
 
 

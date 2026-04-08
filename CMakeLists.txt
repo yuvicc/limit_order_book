@@ -10,6 +10,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(SOURCES
     src/main.cpp
+    src/order.cpp
+    src/orderbook.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
@@ -25,6 +27,4 @@ if(MSVC)
 else()
     target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Werror)
 endif()
-
-
 

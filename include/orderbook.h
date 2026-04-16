@@ -17,7 +17,8 @@ private:
     void AddOrderInternal(std::shared_ptr<Order> order);
     void CancelOrderInternal(OrderId orderId);
     void CancelOrdersInternal(OrderIds orderIds);
-    bool CanMatch(Side side, Price price) const;    
+    bool CanMatch(Side side, Price price) const;
+    bool CanFullyFill(const std::shared_ptr<Order>& order) const;
 
 public:
     Trades addOrder(std::shared_ptr<Order> order);

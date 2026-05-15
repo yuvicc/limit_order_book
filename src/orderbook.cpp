@@ -84,3 +84,28 @@ Trades Orderbook::addOrder(std::shared_ptr<Order> order) {
 
     return trades;
 }
+
+bool Orderbook::CanMatch(Side side, Price price) const {
+
+}
+
+
+bool Orderbook::CanFullyFill(const std::shared_ptr<Order>& order) const {
+    Quantity available = 0;
+
+    if (order->IsBuy()) {
+        for (const auto& [price, orders] : m_asks) {
+            if (price > order->GetPrice()) break;
+            for (const auto& o : orders) available += o->GetRemainingQuantity();
+            if (available >= order->GetRemainingQuantity()) return true;
+        }
+    } else {
+        for (const auto& [price, orders] : m_bids) {
+            if (price < order->GetPrice()) break;
+            for (const auto& o : orders)
+                available += o->GetRemainingQuantity();
+            if (available >= order->GetRemainingQuantity()) return true;
+        }
+    }
+    return false;
+}

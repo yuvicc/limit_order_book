@@ -23,8 +23,10 @@ public:
     Trades addOrder(std::shared_ptr<Order> order);
     void cancelOrder(OrderId orderId);
     Trades modifyOrder(OrderId orderid, Price newPrice, Quantity newQty);
+    PriceLevel getPriceLevel(Price price);
 
     std::size_t size() const;
     bool hasBids() const;
     bool hasAsks() const;
+
 };

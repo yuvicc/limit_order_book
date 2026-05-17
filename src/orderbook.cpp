@@ -1,5 +1,6 @@
 #include "orderbook.h"
 #include "timeinforce.h"
+#include <iterator>
 #include <stdexcept>
 
 std::size_t Orderbook::size() const {
@@ -169,7 +170,32 @@ Trades Orderbook::MatchOrders() {
     return trades;
 }
 
+PriceLevel Orderbook::getPriceLevel(Price price) {
+    PriceLevel level;
+    level.price = price;
+    level.qty = 0;
 
+
+    auto bidIt = m_bids.find(price);
+    if (bidIt != m_bids.end()) {
+        level.orders = bidIt->second;
+        for (const auto& order : level.orders) {
+            level.qty += order->GetRemainingQuantity();
+        }
+        return level;
+    }
+
+    auto askIt = m_asks.find(price);
+    if (askIt != m_asks.end()) {
+        level.orders = askIt->second;
+        for (const auto& order : level.orders) {
+            level.qty += order->GetRemainingQuantity();
+        }
+        return level;
+    }
+
+    return level;    // return empty if not found
+}
 
 
 

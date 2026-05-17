@@ -1,3 +1,4 @@
+#include "alias.h"
 #include "order.h"
 #include <list>
 #include <map>
@@ -9,3 +10,8 @@ using Asks = std::map<Price, Orders, std::less<Price>>;
 
 using OrderLocation = std::list<std::shared_ptr<Order>>::iterator;
 using OrderMap = std::unordered_map<OrderId, OrderLocation>;
+struct PriceLevel {
+    Price price;
+    Quantity qty;
+    Orders orders;
+};

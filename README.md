@@ -53,7 +53,11 @@ The standard way to tackle this would be to use unordered map, since unorded map
 So we would need to group the orders so that we could find which orders to fill first. We will using here price-time-priority for our limit level.
 
 
+## Matching Engine for Exchanges
+- Pure Pro-Rata
+- FIFO + Pro-Rata (todo!)
 
+_Note: The matching algorithms are implemented inside the OrderBook class, I am not sure if that would be the best way to implement it but I am open to suggestions._
 
 
 

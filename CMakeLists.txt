@@ -11,6 +11,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(SOURCES
     src/order.cpp
     src/orderbook.cpp
+    src/matching_algos/pure_prorata.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

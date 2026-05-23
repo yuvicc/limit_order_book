@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 #include "alias.h"
 #include "trade.h"
 #include "order.h"
@@ -18,7 +19,7 @@ private:
     void CancelOrdersInternal(const OrderIds orderIds);
     bool CanMatch(Side side, Price price) const;
     bool CanFullyFill(const std::shared_ptr<Order>& order) const;
-
+    Trades matchPureProrata(std::shared_ptr<Order> taker_order);
 public:
     Trades addOrder(std::shared_ptr<Order> order);
     void cancelOrder(OrderId orderId);
@@ -28,5 +29,7 @@ public:
     std::size_t size() const;
     bool hasBids() const;
     bool hasAsks() const;
-
+    Price getBestBidPrice() const;
+    Price getBestAskPrice() const;
+    void cleanFilledOrders(Price price, Side side);
 };

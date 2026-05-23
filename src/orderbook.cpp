@@ -197,5 +197,49 @@ PriceLevel Orderbook::getPriceLevel(Price price) {
     return level;    // return empty if not found
 }
 
+Price Orderbook::getBestBidPrice() const {
+    if (m_bids.empty()) throw std::logic_error("No bids available");
+    return m_bids.begin()->first;
+}
 
+Price Orderbook::getBestAskPrice() const {
+    if (m_asks.empty()) throw std::logic_error("No asks available");
+    return m_asks.begin()->first;
+}
 
+void Orderbook::cleanFilledOrders(Price price, Side side) {
+    if (side == Side::Buy) {
+        auto it = m_bids.find(price);
+        if (it != m_bids.end()) {
+            auto& orders = it->second;
+            for (auto orderIt = orders.begin(); orderIt != orders.end(); ) {
+                if ((*orderIt)->IsFilled()) {
+                    orderMap.erase((*orderIt)->GetOrderId());
+                    orderIt = orders.erase(orderIt);
+                } else {
+                    ++orderIt;
+                }
+            }
+            
+            if (orders.empty()) {
+                m_bids.erase(it);
+            }
+        }
+    } else {
+        auto it = m_asks.find(price);
+        if (it != m_asks.end()) {
+            auto& orders = it->second;
+            for (auto orderIt = orders.begin(); orderIt != orders.end(); ) {
+                if ((*orderIt)->IsFilled()) {
+                    orderMap.erase((*orderIt)->GetOrderId());
+                    orderIt = orders.erase(orderIt);
+                } else {
+                    ++orderIt;
+                }
+            }
+            if (orders.empty()) {
+                m_asks.erase(it);
+            }
+        }
+    }
+}

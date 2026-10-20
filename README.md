@@ -16,10 +16,9 @@ efficiently ask questions like:
     - What is the order x's current position in the book?
 
 The vast majority of the activity in a book is usually made up of add and cancel operations as market makers
-jockey for position, with executions a distant third (in fact I would argue that the bulk of the useful information on many
-stocks, particularly in the morning, is in the patterns of adds and cancels, not executions, but that is another topic.)
+jockey for position, with executions a distant third.
 
-Each of these operations is keyed off an id number (Order.idNumber) in the pseudo-code below, making a hash table a suitable
+Each of these operations is keyed off an id number (Order.idNumber), making a hash table a suitable
 algorithm for tracking them.
 
 ## The two sides & semantics

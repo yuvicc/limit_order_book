@@ -1,3 +1,5 @@
+#pragma once
+
 #include "alias.h"
 #include <iostream>
 #include <vector>

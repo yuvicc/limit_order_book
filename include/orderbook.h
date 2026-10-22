@@ -7,13 +7,19 @@
 #include "order.h"
 #include "orderbook_alias.h"
 
+enum class MatchingAlgo {
+    FIFO,
+    ProRata
+};
+
 class Orderbook {
 private:
     Bids m_bids;
     Asks m_asks;
     OrderMap orderMap;
+    MatchingAlgo m_algo;
 
-    Trades MatchOrders();
+    Trades MatchOrders(const std::shared_ptr<Order>& incoming);
     void AddOrderInternal(std::shared_ptr<Order> order);
     void CancelOrderInternal(OrderId orderId);
     void CancelOrdersInternal(const OrderIds orderIds);
@@ -21,6 +27,8 @@ private:
     bool CanFullyFill(const std::shared_ptr<Order>& order) const;
     Trades matchPureProrata(std::shared_ptr<Order> taker_order);
 public:
+    explicit Orderbook(MatchingAlgo algo = MatchingAlgo::FIFO) : m_algo{ algo } { }
+
     Trades addOrder(std::shared_ptr<Order> order);
     void cancelOrder(OrderId orderId);
     Trades modifyOrder(OrderId orderid, Price newPrice, Quantity newQty);

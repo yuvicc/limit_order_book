@@ -1,7 +1,11 @@
+#pragma once
+
 #include "alias.h"
 #include "order.h"
+#include <functional>
 #include <list>
 #include <map>
+#include <memory>
 #include <unordered_map>
 
 using Orders = std::list<std::shared_ptr<Order>>;

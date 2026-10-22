@@ -7,7 +7,8 @@ void Order::Fill(Quantity qty)
     if (qty > GetRemainingQuantity())
         throw std::logic_error(std::format("Order ({}) cannot be filled for more than its remaining quantity.", GetOrderId()));
     
-    remainingQuantity_ -= qty;    
+    remainingQuantity_ -= qty;
+    status_ = IsFilled() ? OrderStatus::Filled : OrderStatus::PartiallyFilled;
 }
 
 void Order::UpdatePrice(const Price price)
@@ -22,7 +23,7 @@ void Order::UpdateQuantity(const Quantity qty)
 
 void Order::Cancel()
 {
-    remainingQuantity_ = 0;
+    status_ = OrderStatus::Cancelled;
 }
 
 void Order::ToGoodTillCancel(const Price price)

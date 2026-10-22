@@ -67,10 +67,11 @@ Trades Orderbook::matchPureProrata(std::shared_ptr<Order> taker_order)
                 taker_order->Fill(fill_qty);
                 level_vol_filled += fill_qty;
 
-                all_trades.push_back(Trade{
-                    TradeInfo{ maker_order->GetOrderId(), fill_qty, best_price },
-                    TradeInfo{ taker_order->GetOrderId(), fill_qty, best_price }
-                });
+                TradeInfo maker_info{ maker_order->GetOrderId(), fill_qty, best_price };
+                TradeInfo taker_info{ taker_order->GetOrderId(), fill_qty, best_price };
+                all_trades.push_back(taker_order->IsBuy()
+                    ? Trade{ taker_info, maker_info }
+                    : Trade{ maker_info, taker_info });
             }
         }
         cleanFilledOrders(best_price, maker_side);

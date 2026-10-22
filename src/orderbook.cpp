@@ -82,9 +82,17 @@ Trades Orderbook::addOrder(std::shared_ptr<Order> order) {
         if (!CanFullyFill(order))
             return {};                      // No trades, order rejected silently
 
+    if (m_algo == MatchingAlgo::ProRata) {
+        // Taker matches first; only a leftover GTC quantity rests in the book
+        auto trades = matchPureProrata(order);
+        if (order->IsActive() && order->GetTimeInForce() != TimeInForce::IOC)
+            AddOrderInternal(order);
+        return trades;
+    }
+
     AddOrderInternal(order);
 
-    auto trades = MatchOrders();
+    auto trades = MatchOrders(order);
 
     if (order->GetTimeInForce() == TimeInForce::IOC) {
         if (order->IsActive())
@@ -127,7 +135,7 @@ bool Orderbook::CanFullyFill(const std::shared_ptr<Order>& order) const {
     return false;
 }
 
-Trades Orderbook::MatchOrders() {
+Trades Orderbook::MatchOrders(const std::shared_ptr<Order>& incoming) {
     Trades trades;
 
     while (true) {
@@ -145,7 +153,8 @@ Trades Orderbook::MatchOrders() {
             bid_order->GetRemainingQuantity(),
             ask_order->GetRemainingQuantity()
         );
-        Price fillPrice = ask_order->GetPrice();
+        // Trades execute at the resting (maker) order's price, never the aggressor's
+        Price fillPrice = incoming->IsBuy() ? ask_order->GetPrice() : bid_order->GetPrice();
 
         bid_order->Fill(fillQty);
         ask_order->Fill(fillQty);
@@ -195,6 +204,14 @@ PriceLevel Orderbook::getPriceLevel(Price price) {
     }
 
     return level;    // return empty if not found
+}
+
+bool Orderbook::hasBids() const {
+    return !m_bids.empty();
+}
+
+bool Orderbook::hasAsks() const {
+    return !m_asks.empty();
 }
 
 Price Orderbook::getBestBidPrice() const {

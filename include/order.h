@@ -9,9 +9,11 @@
 class Order {
 
 public:
-    Order(OrderId orderId, OrderType orderType, Price price, Quantity qty, Side side)
+    Order(OrderId orderId, OrderType orderType, Price price, Quantity qty, Side side,
+          TimeInForce tif = TimeInForce::GTC)
     : orderId_{ orderId }
     , orderType_{ orderType }
+    , tif_{ tif }
     , price_{ price }
     , initialQuantity_{ qty }
     , remainingQuantity_{ qty }
@@ -49,6 +51,6 @@ private:
     Quantity initialQuantity_;
     Quantity remainingQuantity_;
     Side side_;
-    OrderStatus status_;
-    Timestamp timestamp_;
+    OrderStatus status_{ OrderStatus::New };
+    Timestamp timestamp_{ 0 };
 };
